@@ -1,4 +1,5 @@
 pub mod cli;
+pub mod loader;
 
 fn main() {
     let args = cli::get_args();
@@ -8,4 +9,5 @@ fn main() {
     }
 
     let prog_path = &args[0];
+    let prog = loader::load_prog(&prog_path).unwrap();
 }
