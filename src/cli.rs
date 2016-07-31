@@ -1,4 +1,13 @@
-//! Program usage.
+//! Command-line interface.
+
+use std;
+
+///
+/// Returns program arguments, excluding program name.
+///
+pub fn get_args() -> Vec<String> {
+    std::env::args().skip(1).collect()
+}
 
 ///
 /// Should program usage be printed?

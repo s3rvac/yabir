@@ -1,9 +1,11 @@
-pub mod usage;
+pub mod cli;
 
 fn main() {
-    let args: Vec<_> = std::env::args().skip(1).collect();
-    if usage::should_print_usage(&args) {
-        usage::print_usage();
+    let args = cli::get_args();
+    if cli::should_print_usage(&args) {
+        cli::print_usage();
         std::process::exit(0);
     }
+
+    let prog_path = &args[0];
 }
