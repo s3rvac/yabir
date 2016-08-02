@@ -46,7 +46,7 @@ pub fn parse(tokens: &Vec<Token>) -> Result<Vec<Instruction>, String> {
             Token::LoopStart => {
                 instructions.push(Instruction::LoopStart(0));
                 loop_stack.push(i);
-            },
+            }
             Token::LoopEnd => {
                 let target = match loop_stack.pop() {
                     Some(target) => target,
@@ -58,7 +58,7 @@ pub fn parse(tokens: &Vec<Token>) -> Result<Vec<Instruction>, String> {
                 };
                 instructions.push(Instruction::LoopEnd(target));
                 instructions[target] = Instruction::LoopStart(i);
-            },
+            }
         }
     }
 
