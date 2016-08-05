@@ -66,19 +66,19 @@ impl Runner {
                 self.dp -= 1;
             },
             Instruction::Inc => {
-                let value = self.get_value();
-                self.set_value(value.wrapping_add(1));
+                let value = self.load_value();
+                self.store_value(value.wrapping_add(1));
             },
             Instruction::Dec => {
-                let value = self.get_value();
-                self.set_value(value.wrapping_sub(1));
+                let value = self.load_value();
+                self.store_value(value.wrapping_sub(1));
             },
             Instruction::Read => {
                 let value = try!(self.read_value(&mut input));
-                self.set_value(value);
+                self.store_value(value);
             },
             Instruction::Write => {
-                let value = self.get_value();
+                let value = self.load_value();
                 try!(self.write_value(&mut output, value));
             },
             Instruction::LoopStart(loop_end_ip) => {
@@ -96,12 +96,12 @@ impl Runner {
         Ok(())
     }
 
-    fn get_value(&mut self) -> u8 {
+    fn load_value(&mut self) -> u8 {
         self.ensure_current_cell_is_accessible();
         self.data[self.dp]
     }
 
-    fn set_value(&mut self, value: u8) {
+    fn store_value(&mut self, value: u8) {
         self.ensure_current_cell_is_accessible();
         self.data[self.dp] = value;
     }
@@ -122,7 +122,7 @@ impl Runner {
     }
 
     fn is_current_cell_zero(&mut self) -> bool {
-        self.get_value() == 0
+        self.load_value() == 0
     }
 
     fn ensure_current_cell_is_accessible(&mut self) {
