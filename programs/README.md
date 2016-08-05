@@ -3,6 +3,7 @@ Programs
 
 This directory contains various programs that you can run with the interpreter:
 
+* `copy.bf` -- Reads content from stdin and writes it to stdout.
 * `hello.bf` -- Prints `Hello World!` (taken from [English
   Wikipedia](https://en.wikipedia.org/wiki/Brainfuck)).
 * `mandelbrot.bf` -- Generates a Mandelbrot fractal (taken from
