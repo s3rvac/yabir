@@ -96,6 +96,16 @@ impl Runner {
         Ok(())
     }
 
+    fn get_value(&mut self) -> u8 {
+        self.ensure_current_cell_is_accessible();
+        self.data[self.dp]
+    }
+
+    fn set_value(&mut self, value: u8) {
+        self.ensure_current_cell_is_accessible();
+        self.data[self.dp] = value;
+    }
+
     fn read_value(&self, mut input: &mut std::io::Read) -> Result<u8, String> {
         let mut buf = [0u8];
         match input.read_exact(&mut buf[..]) {
@@ -113,16 +123,6 @@ impl Runner {
 
     fn is_current_cell_zero(&mut self) -> bool {
         self.get_value() == 0
-    }
-
-    fn get_value(&mut self) -> u8 {
-        self.ensure_current_cell_is_accessible();
-        self.data[self.dp]
-    }
-
-    fn set_value(&mut self, value: u8) {
-        self.ensure_current_cell_is_accessible();
-        self.data[self.dp] = value;
     }
 
     fn ensure_current_cell_is_accessible(&mut self) {
