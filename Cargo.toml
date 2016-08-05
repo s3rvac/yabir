@@ -2,5 +2,3 @@
 name = "yabir"
 version = "0.1.0"
 authors = ["Petr Zemek <s3rvac@gmail.com>"]
-
-[dependencies]
