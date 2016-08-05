@@ -43,26 +43,47 @@ pub fn parse(tokens: &Vec<Token>) -> Result<Vec<Instruction>, String> {
             Token::Dec => instructions.push(Instruction::Dec),
             Token::Read => instructions.push(Instruction::Read),
             Token::Write => instructions.push(Instruction::Write),
-            Token::LoopStart => {
-                instructions.push(Instruction::LoopStart(0));
-                loop_stack.push(i);
-            }
-            Token::LoopEnd => {
-                let target = match loop_stack.pop() {
-                    Some(target) => target,
-                    None => {
-                        return Err(
-                            format!("missing start of a loop ended at index {}", i)
-                        );
-                    }
-                };
-                instructions.push(Instruction::LoopEnd(target));
-                instructions[target] = Instruction::LoopStart(i);
-            }
+            Token::LoopStart =>
+                try!(handle_loop_start(&mut instructions, &mut loop_stack, i)),
+            Token::LoopEnd =>
+                try!(handle_loop_end(&mut instructions, &mut loop_stack, i)),
         }
     }
+    try!(ensure_all_loops_have_ended(&loop_stack));
+    Ok(instructions)
+}
 
-    // All loops must have been ended by now.
+fn handle_loop_start(instructions: &mut Vec<Instruction>,
+                     loop_stack: &mut Vec<usize>,
+                     i: usize)
+                     -> Result<(), String> {
+    // We don't know the target yet, so pass 0. It will be updated later when
+    // we reach the target.
+    instructions.push(Instruction::LoopStart(0));
+    loop_stack.push(i);
+    Ok(())
+}
+
+fn handle_loop_end(instructions: &mut Vec<Instruction>,
+                   loop_stack: &mut Vec<usize>,
+                   i: usize)
+                   -> Result<(), String> {
+    let target = match loop_stack.pop() {
+        Some(target) => target,
+        None => {
+            return Err(
+                format!("missing start of a loop ended at index {}", i)
+            );
+        }
+    };
+    instructions.push(Instruction::LoopEnd(target));
+    // Update the index of the target in the loop start because it was
+    // initialized to zero.
+    instructions[target] = Instruction::LoopStart(i);
+    Ok(())
+}
+
+fn ensure_all_loops_have_ended(loop_stack: &Vec<usize>) -> Result<(), String> {
     if !loop_stack.is_empty() {
         return Err(
             format!(
@@ -71,8 +92,7 @@ pub fn parse(tokens: &Vec<Token>) -> Result<Vec<Instruction>, String> {
             )
         );
     }
-
-    Ok(instructions)
+    Ok(())
 }
 
 #[cfg(test)]
