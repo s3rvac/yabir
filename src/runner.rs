@@ -167,17 +167,31 @@ mod tests {
     use std;
     use parser::Instruction;
 
+    fn run_and_get_output(prog: Vec<Instruction>,
+                          input: &[u8])
+                          -> Result<Vec<u8>, String> {
+        let mut output = Vec::new();
+        match {
+            let mut input_reader = std::io::BufReader::new(input.as_ref());
+            let mut output_writer = std::io::BufWriter::new(&mut output);
+            run(prog, &mut input_reader, &mut output_writer)
+        } {
+            Ok(_) => Ok(output),
+            Err(err) => Err(err),
+        }
+    }
+
     fn assert_run_writes_correct_output(prog: Vec<Instruction>,
                                         input: &[u8],
                                         expected_output: &[u8]) {
-        let mut output = Vec::new();
-        {
-            let mut input_reader = std::io::BufReader::new(input.as_ref());
-            let mut output_writer = std::io::BufWriter::new(&mut output);
-            run(prog, &mut input_reader, &mut output_writer).unwrap();
-        }
-
+        let output = run_and_get_output(prog, input).unwrap();
         assert_eq!(output, expected_output);
+    }
+
+    fn assert_run_returns_error(prog: Vec<Instruction>,
+                         input: &[u8]) {
+        let result = run_and_get_output(prog, input);
+        assert!(result.is_err());
     }
 
     #[test]
