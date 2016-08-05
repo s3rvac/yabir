@@ -15,7 +15,7 @@ pub struct Runner {
     /// Instruction pointer (index).
     ip: usize,
     /// Data-cell pointer (index).
-    dp: usize
+    dp: usize,
 }
 
 impl Runner {
@@ -38,7 +38,8 @@ impl Runner {
     pub fn run(&mut self,
                prog: Vec<Instruction>,
                mut input: &mut std::io::Read,
-               mut output: &mut std::io::Write) -> Result<(), String> {
+               mut output: &mut std::io::Write)
+               -> Result<(), String> {
         self.prog = prog;
         self.data.clear();
         self.ip = 0;
@@ -57,35 +58,36 @@ impl Runner {
 
     fn run_instruction(&mut self,
                        mut input: &mut std::io::Read,
-                       mut output: &mut std::io::Write) -> Result<(), String> {
+                       mut output: &mut std::io::Write)
+                       -> Result<(), String> {
         match self.prog[self.ip] {
             Instruction::Next => {
                 self.dp += 1;
-            },
+            }
             Instruction::Prev => {
                 self.dp -= 1;
-            },
+            }
             Instruction::Inc => {
                 let value = self.load_value();
                 self.store_value(value.wrapping_add(1));
-            },
+            }
             Instruction::Dec => {
                 let value = self.load_value();
                 self.store_value(value.wrapping_sub(1));
-            },
+            }
             Instruction::Read => {
                 let value = try!(self.read_value(&mut input));
                 self.store_value(value);
-            },
+            }
             Instruction::Write => {
                 let value = self.load_value();
                 try!(self.write_value(&mut output, value));
-            },
+            }
             Instruction::LoopStart(loop_end_ip) => {
                 if self.is_current_cell_zero() {
                     self.ip = loop_end_ip;
                 }
-            },
+            }
             Instruction::LoopEnd(loop_start_ip) => {
                 if !self.is_current_cell_zero() {
                     self.ip = loop_start_ip;
@@ -110,14 +112,14 @@ impl Runner {
         let mut buf = [0u8];
         match input.read_exact(&mut buf[..]) {
             Err(err) => Err(format!("{}", err)),
-            Ok(_) => Ok(buf[0])
+            Ok(_) => Ok(buf[0]),
         }
     }
 
     fn write_value(&self, mut output: &mut std::io::Write, value: u8) -> Result<(), String> {
         match output.write(&[value]) {
             Err(err) => Err(format!("{}", err)),
-            Ok(_) => Ok(())
+            Ok(_) => Ok(()),
         }
     }
 
@@ -145,8 +147,9 @@ impl Runner {
 /// * `output` - Output for the program.
 ///
 pub fn run(prog: Vec<Instruction>,
-       mut input: &mut std::io::Read,
-       mut output: &mut std::io::Write) -> Result<(), String> {
+           mut input: &mut std::io::Read,
+           mut output: &mut std::io::Write)
+           -> Result<(), String> {
     let mut runner = Runner::new();
     runner.run(prog, &mut input, &mut output)
 }
@@ -158,8 +161,8 @@ mod tests {
     use parser::Instruction;
 
     fn assert_run_writes_correct_output(prog: Vec<Instruction>,
-                                               input: &[u8],
-                                               expected_output: &[u8]) {
+                                        input: &[u8],
+                                        expected_output: &[u8]) {
         let mut output = Vec::new();
         {
             let mut input_reader = std::io::BufReader::new(input.as_ref());
