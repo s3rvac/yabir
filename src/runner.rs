@@ -111,14 +111,18 @@ impl Runner {
     fn read_value(&self, mut input: &mut std::io::Read) -> Result<u8, String> {
         let mut buf = [0u8];
         match input.read_exact(&mut buf[..]) {
-            Err(err) => Err(format!("{}", err)),
+            Err(err) => Err(
+                format!("reading of a value failed (reason: {})", err)
+            ),
             Ok(_) => Ok(buf[0]),
         }
     }
 
     fn write_value(&self, mut output: &mut std::io::Write, value: u8) -> Result<(), String> {
         match output.write(&[value]) {
-            Err(err) => Err(format!("{}", err)),
+            Err(err) => Err(
+                format!("writing of a value failed (reason: {})", err)
+            ),
             Ok(_) => Ok(()),
         }
     }
