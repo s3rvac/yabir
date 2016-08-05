@@ -65,6 +65,7 @@ impl Runner {
                 self.dp += 1;
             }
             Instruction::Prev => {
+                try!(self.ensure_can_decrement_dp_by_one());
                 self.dp -= 1;
             }
             Instruction::Inc => {
@@ -140,6 +141,13 @@ impl Runner {
             for _ in 0..(self.dp - cell_count + 1) {
                 self.data.push(0);
             }
+        }
+    }
+
+    fn ensure_can_decrement_dp_by_one(&self) -> Result<(), String> {
+        match self.dp {
+            0 => Err("cannot decrement the data pointer because it is 0".to_string()),
+            _ => Ok(()),
         }
     }
 }
@@ -318,5 +326,10 @@ mod tests {
             &[4, 3, 1, 5],
             &[4, 3, 1, 5]
         );
+    }
+
+    #[test]
+    fn test_returns_error_when_underflowing_data_pointer() {
+        assert_run_returns_error(vec![Instruction::Prev], &[]);
     }
 }
