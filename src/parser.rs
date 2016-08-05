@@ -17,7 +17,7 @@ pub enum Instruction {
     Dec,
     /// Read a byte from the input into the current cell (`,`).
     Read,
-    /// Write a byte from the the current cell into the output (`,`).
+    /// Write a byte from the current cell into the output (`,`).
     Write,
     /// Start of a loop ending on the given index (`[`).
     LoopStart(usize),
