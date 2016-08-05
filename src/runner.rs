@@ -111,9 +111,12 @@ impl Runner {
     fn read_value(&self, mut input: &mut std::io::Read) -> Result<u8, String> {
         let mut buf = [0u8];
         match input.read_exact(&mut buf) {
-            Err(err) => Err(
-                format!("reading of a value failed (reason: {})", err)
-            ),
+            Err(err) => match err.kind() {
+                // There are multiple ways of dealing with EOF. We have chosen
+                // to return 0.
+                std::io::ErrorKind::UnexpectedEof => Ok(0),
+                _ => Err(format!("reading of a value failed (reason: {:?})", err.kind())),
+            },
             Ok(_) => Ok(buf[0]),
         }
     }
@@ -199,6 +202,18 @@ mod tests {
     }
 
     #[test]
+    fn test_read_stores_zero_when_at_end_of_file() {
+        assert_run_writes_correct_output(
+            vec![
+                Instruction::Read,
+                Instruction::Write
+            ],
+            &[],
+            &[0]
+        );
+    }
+
+    #[test]
     fn test_run_can_increment_cell() {
         assert_run_writes_correct_output(
             vec![
@@ -259,6 +274,35 @@ mod tests {
             ],
             &[2],
             &[0, 2]
+        );
+    }
+
+    #[test]
+    fn test_copies_input_to_output() {
+        assert_run_writes_correct_output(
+            vec![
+                // Read the whole input:
+                Instruction::Next,
+                Instruction::Inc,
+                Instruction::LoopStart(5),
+                Instruction::Next,
+                Instruction::Read,
+                Instruction::LoopEnd(2),
+                // Rewind to the beginning:
+                Instruction::Prev,
+                Instruction::LoopStart(9),
+                Instruction::Prev,
+                Instruction::LoopEnd(7),
+                // Write the whole input:
+                Instruction::Next,
+                Instruction::Next,
+                Instruction::LoopStart(15),
+                Instruction::Write,
+                Instruction::Next,
+                Instruction::LoopEnd(12)
+            ],
+            &[4, 3, 1, 5],
+            &[4, 3, 1, 5]
         );
     }
 }
