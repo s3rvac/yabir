@@ -110,7 +110,7 @@ impl Runner {
 
     fn read_value(&self, mut input: &mut std::io::Read) -> Result<u8, String> {
         let mut buf = [0u8];
-        match input.read_exact(&mut buf[..]) {
+        match input.read_exact(&mut buf) {
             Err(err) => Err(
                 format!("reading of a value failed (reason: {})", err)
             ),
