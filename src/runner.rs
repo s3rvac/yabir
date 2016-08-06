@@ -111,13 +111,18 @@ impl Runner {
         self.data[self.dp] = value;
     }
 
-    fn read_value(&self, mut input: &mut std::io::Read) -> Result<u8, String> {
+    fn read_value(&mut self, mut input: &mut std::io::Read) -> Result<u8, String> {
         let mut buf = [0u8];
         match input.read_exact(&mut buf) {
             Err(err) => match err.kind() {
-                // There are multiple ways of dealing with EOF. We have chosen
-                // to return 0.
-                std::io::ErrorKind::UnexpectedEof => Ok(0),
+                std::io::ErrorKind::UnexpectedEof => {
+                    // There are multiple ways of dealing with EOF (see
+                    // https://en.wikipedia.org/wiki/Brainfuck#End-of-file_behavior).
+                    // We have chosen to return the value of the current cell,
+                    // i.e. Instruction::Read will not change the value of the
+                    // current cell.
+                    Ok(self.load_value())
+                }
                 _ => Err(format!("reading of a value failed (reason: {:?})", err.kind())),
             },
             Ok(_) => Ok(buf[0]),
@@ -236,14 +241,15 @@ mod tests {
     }
 
     #[test]
-    fn test_read_stores_zero_when_at_end_of_file() {
+    fn test_read_does_not_alter_cell_value_when_at_end_of_file() {
         assert_run_writes_correct_output(
             vec![
+                Instruction::Inc,
                 Instruction::Read,
                 Instruction::Write
             ],
             &[],
-            &[0]
+            &[1]
         );
     }
 
