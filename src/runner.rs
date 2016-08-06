@@ -62,6 +62,7 @@ impl Runner {
                        -> Result<(), String> {
         match self.prog[self.ip] {
             Instruction::Next => {
+                try!(self.ensure_can_increment_dp_by_one());
                 self.dp += 1;
             }
             Instruction::Prev => {
@@ -141,6 +142,15 @@ impl Runner {
             for _ in 0..(self.dp - cell_count + 1) {
                 self.data.push(0);
             }
+        }
+    }
+
+    fn ensure_can_increment_dp_by_one(&self) -> Result<(), String> {
+        match self.dp {
+            std::usize::MAX => Err(
+                "cannot increment the data pointer because it is MAX".to_string()
+            ),
+            _ => Ok(()),
         }
     }
 
