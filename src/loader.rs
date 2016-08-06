@@ -10,9 +10,13 @@ use std;
 ///
 /// * `path` - Path to the program.
 ///
-pub fn load_prog<P: AsRef<std::path::Path>>(path: P) -> std::io::Result<String> {
-    let mut f = try!(std::fs::File::open(path));
+pub fn load_prog(path: &String) -> Result<String, String> {
+    let mut f = try!(std::fs::File::open(path)
+        .map_err(|err| err.to_string())
+    );
     let mut s = String::new();
-    try!(f.read_to_string(&mut s));
+    try!(f.read_to_string(&mut s)
+        .map_err(|err| err.to_string())
+    );
     Ok(s)
 }

@@ -209,7 +209,10 @@ mod tests {
     fn assert_run_writes_correct_output(prog: Instructions,
                                         input: &[u8],
                                         expected_output: &[u8]) {
-        let output = run_and_get_output(prog, input).unwrap();
+        let output = match run_and_get_output(prog, input) {
+            Ok(output) => output,
+            Err(err) => panic!("run() failed with {}", err),
+        };
         assert_eq!(output, expected_output);
     }
 

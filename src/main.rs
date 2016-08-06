@@ -4,6 +4,8 @@ pub mod loader;
 pub mod parser;
 pub mod runner;
 
+use std::io::Write;
+
 fn main() {
     let args = cli::get_args();
     if cli::should_print_usage(&args) {
@@ -11,9 +13,22 @@ fn main() {
         std::process::exit(0);
     }
 
-    let prog_path = &args[0];
-    let prog = loader::load_prog(&prog_path).unwrap();
+    run_prog(&args[0]).unwrap_or_else(|err| {
+        print_error(&err);
+        std::process::exit(1);
+    })
+}
+
+fn run_prog(prog_path: &String) -> Result<(), String> {
+    let prog = try!(loader::load_prog(&prog_path));
     let prog_tokens = lexer::tokenize(&prog);
-    let prog_ops = parser::parse(&prog_tokens).unwrap();
-    runner::run(prog_ops, &mut std::io::stdin(), &mut std::io::stdout()).unwrap();
+    let prog_ops = try!(parser::parse(&prog_tokens));
+    let mut input = std::io::stdin();
+    let mut output = std::io::stdout();
+    runner::run(prog_ops, &mut input, &mut output)
+}
+
+fn print_error(err: &String) {
+    writeln!(&mut std::io::stderr(), "error: {}", err)
+        .expect("failed printing an error");
 }
