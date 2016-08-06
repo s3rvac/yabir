@@ -1,6 +1,7 @@
 //! Syntactic analysis of programs.
 
 use lexer::Token;
+use lexer::Tokens;
 
 ///
 /// Instructions.
@@ -35,7 +36,7 @@ pub type Instructions = Vec<Instruction>;
 ///
 /// * `tokens` - Tokens representing a program.
 ///
-pub fn parse(tokens: &Vec<Token>) -> Result<Instructions, String> {
+pub fn parse(tokens: &Tokens) -> Result<Instructions, String> {
     let mut instructions = Instructions::with_capacity(tokens.len());
     let mut loop_stack: Vec<usize> = Vec::new();
     for (i, token) in tokens.iter().enumerate() {

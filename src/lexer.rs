@@ -23,6 +23,9 @@ pub enum Token {
     LoopEnd,
 }
 
+/// A vector of tokens.
+pub type Tokens = Vec<Token>;
+
 ///
 /// Converts the given program into a vector of tokens.
 ///
@@ -30,8 +33,8 @@ pub enum Token {
 ///
 /// * `prog` - A program to be tokenized.
 ///
-pub fn tokenize(prog: &String) -> Vec<Token> {
-    let mut tokens = Vec::new();
+pub fn tokenize(prog: &String) -> Tokens {
+    let mut tokens = Tokens::new();
     for c in prog.chars() {
         match c {
             '>' => tokens.push(Token::Next),
