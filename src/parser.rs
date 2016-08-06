@@ -92,15 +92,10 @@ fn handle_loop_end(instructions: &mut Instructions,
 }
 
 fn ensure_all_loops_have_ended(loop_stack: &LoopStack) -> Result<(), String> {
-    if !loop_stack.is_empty() {
-        return Err(
-            format!(
-                "missing end of a loop started at index {}",
-                loop_stack.last().unwrap()
-            )
-        );
+    match loop_stack.last() {
+        None => Ok(()),
+        Some(i) => Err(format!("missing end of a loop started at index {}", i)),
     }
-    Ok(())
 }
 
 #[cfg(test)]
