@@ -1,6 +1,7 @@
 //! Running of programs.
 
 use parser::Instruction;
+use parser::Instructions;
 use std;
 
 ///
@@ -9,7 +10,7 @@ use std;
 #[derive(Default)]
 pub struct Runner {
     /// Program to be run.
-    prog: Vec<Instruction>,
+    prog: Instructions,
     /// A potentially infinite number of data cells.
     data: Vec<u8>,
     /// Instruction pointer (index).
@@ -36,7 +37,7 @@ impl Runner {
     /// * `output` - Output for the program.
     ///
     pub fn run(&mut self,
-               prog: Vec<Instruction>,
+               prog: Instructions,
                mut input: &mut std::io::Read,
                mut output: &mut std::io::Write)
                -> Result<(), String> {
@@ -171,7 +172,7 @@ impl Runner {
 /// * `input` - Input for the program.
 /// * `output` - Output for the program.
 ///
-pub fn run(prog: Vec<Instruction>,
+pub fn run(prog: Instructions,
            mut input: &mut std::io::Read,
            mut output: &mut std::io::Write)
            -> Result<(), String> {
@@ -184,8 +185,9 @@ mod tests {
     use super::*;
     use std;
     use parser::Instruction;
+    use parser::Instructions;
 
-    fn run_and_get_output(prog: Vec<Instruction>,
+    fn run_and_get_output(prog: Instructions,
                           input: &[u8])
                           -> Result<Vec<u8>, String> {
         let mut output = Vec::new();
@@ -199,14 +201,14 @@ mod tests {
         }
     }
 
-    fn assert_run_writes_correct_output(prog: Vec<Instruction>,
+    fn assert_run_writes_correct_output(prog: Instructions,
                                         input: &[u8],
                                         expected_output: &[u8]) {
         let output = run_and_get_output(prog, input).unwrap();
         assert_eq!(output, expected_output);
     }
 
-    fn assert_run_returns_error(prog: Vec<Instruction>,
+    fn assert_run_returns_error(prog: Instructions,
                          input: &[u8]) {
         let result = run_and_get_output(prog, input);
         assert!(result.is_err());

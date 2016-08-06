@@ -25,6 +25,9 @@ pub enum Instruction {
     LoopEnd(usize),
 }
 
+/// A vector of instructions.
+pub type Instructions = Vec<Instruction>;
+
 ///
 /// Parses the given vector of tokens into a vector of instructions.
 ///
@@ -32,8 +35,8 @@ pub enum Instruction {
 ///
 /// * `tokens` - Tokens representing a program.
 ///
-pub fn parse(tokens: &Vec<Token>) -> Result<Vec<Instruction>, String> {
-    let mut instructions = Vec::with_capacity(tokens.len());
+pub fn parse(tokens: &Vec<Token>) -> Result<Instructions, String> {
+    let mut instructions = Instructions::with_capacity(tokens.len());
     let mut loop_stack: Vec<usize> = Vec::new();
     for (i, token) in tokens.iter().enumerate() {
         match *token {
@@ -53,7 +56,7 @@ pub fn parse(tokens: &Vec<Token>) -> Result<Vec<Instruction>, String> {
     Ok(instructions)
 }
 
-fn handle_loop_start(instructions: &mut Vec<Instruction>,
+fn handle_loop_start(instructions: &mut Instructions,
                      loop_stack: &mut Vec<usize>,
                      i: usize)
                      -> Result<(), String> {
@@ -64,7 +67,7 @@ fn handle_loop_start(instructions: &mut Vec<Instruction>,
     Ok(())
 }
 
-fn handle_loop_end(instructions: &mut Vec<Instruction>,
+fn handle_loop_end(instructions: &mut Instructions,
                    loop_stack: &mut Vec<usize>,
                    i: usize)
                    -> Result<(), String> {
