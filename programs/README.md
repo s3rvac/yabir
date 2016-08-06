@@ -8,6 +8,9 @@ This directory contains various programs that you can run with the interpreter:
   Wikipedia](https://en.wikipedia.org/wiki/Brainfuck)).
 * `mandelbrot.bf` -- Generates a Mandelbrot fractal (taken from
   [http://esoteric.sange.fi/brainfuck/bf-source/prog](http://esoteric.sange.fi/brainfuck/bf-source/prog)).
+* `rot13.bf` -- Enciphers the input with the
+  [ROT13](https://en.wikipedia.org/wiki/ROT13) cipher (taken from [English
+  Wikipedia](https://en.wikipedia.org/wiki/Brainfuck)).
 * `sierpinski.bf` -- Generates a Sierpinksi triangle fractal (taken from
   [Spanish Wikipedia](http://es.wikipedia.org/wiki/Brainfuck)).
 
