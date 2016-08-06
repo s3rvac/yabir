@@ -79,12 +79,10 @@ impl Runner {
                 self.store_value(value.wrapping_sub(1));
             }
             Instruction::Read => {
-                let value = try!(self.read_value(&mut input));
-                self.store_value(value);
+                try!(self.read_value(&mut input));
             }
             Instruction::Write => {
-                let value = self.load_value();
-                try!(self.write_value(&mut output, value));
+                try!(self.write_value(&mut output));
             }
             Instruction::LoopStart(loop_end_ip) => {
                 if self.is_current_cell_zero() {
@@ -111,25 +109,27 @@ impl Runner {
         self.data[self.dp] = value;
     }
 
-    fn read_value(&mut self, mut input: &mut std::io::Read) -> Result<u8, String> {
+    fn read_value(&mut self, mut input: &mut std::io::Read) -> Result<(), String> {
         let mut buf = [0u8];
         match input.read_exact(&mut buf) {
             Err(err) => match err.kind() {
                 std::io::ErrorKind::UnexpectedEof => {
                     // There are multiple ways of dealing with EOF (see
                     // https://en.wikipedia.org/wiki/Brainfuck#End-of-file_behavior).
-                    // We have chosen to return the value of the current cell,
-                    // i.e. Instruction::Read will not change the value of the
-                    // current cell.
-                    Ok(self.load_value())
-                }
+                    // We have chosen to leave the current cell unchanged.
+                    Ok(())
+                },
                 _ => Err(format!("reading of a value failed (reason: {:?})", err.kind())),
             },
-            Ok(_) => Ok(buf[0]),
+            Ok(_) => {
+                self.store_value(buf[0]);
+                Ok(())
+            }
         }
     }
 
-    fn write_value(&self, mut output: &mut std::io::Write, value: u8) -> Result<(), String> {
+    fn write_value(&mut self, mut output: &mut std::io::Write) -> Result<(), String> {
+        let value = self.load_value();
         match output.write(&[value]) {
             Err(err) => Err(
                 format!("writing of a value failed (reason: {})", err)
