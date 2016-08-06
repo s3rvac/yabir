@@ -29,6 +29,10 @@ pub enum Instruction {
 /// A vector of instructions.
 pub type Instructions = Vec<Instruction>;
 
+/// An internal stack of opened loop indexes that need to be closed before
+/// parsing is finished.
+type LoopStack = Vec<usize>;
+
 ///
 /// Parses the given vector of tokens into a vector of instructions.
 ///
@@ -38,7 +42,7 @@ pub type Instructions = Vec<Instruction>;
 ///
 pub fn parse(tokens: &Tokens) -> Result<Instructions, String> {
     let mut instructions = Instructions::with_capacity(tokens.len());
-    let mut loop_stack: Vec<usize> = Vec::new();
+    let mut loop_stack = LoopStack::new();
     for (i, token) in tokens.iter().enumerate() {
         match *token {
             Token::Next => instructions.push(Instruction::Next),
@@ -58,7 +62,7 @@ pub fn parse(tokens: &Tokens) -> Result<Instructions, String> {
 }
 
 fn handle_loop_start(instructions: &mut Instructions,
-                     loop_stack: &mut Vec<usize>,
+                     loop_stack: &mut LoopStack,
                      i: usize)
                      -> Result<(), String> {
     // We don't know the target yet, so pass 0. It will be updated later when
@@ -69,7 +73,7 @@ fn handle_loop_start(instructions: &mut Instructions,
 }
 
 fn handle_loop_end(instructions: &mut Instructions,
-                   loop_stack: &mut Vec<usize>,
+                   loop_stack: &mut LoopStack,
                    i: usize)
                    -> Result<(), String> {
     let target = match loop_stack.pop() {
@@ -87,7 +91,7 @@ fn handle_loop_end(instructions: &mut Instructions,
     Ok(())
 }
 
-fn ensure_all_loops_have_ended(loop_stack: &Vec<usize>) -> Result<(), String> {
+fn ensure_all_loops_have_ended(loop_stack: &LoopStack) -> Result<(), String> {
     if !loop_stack.is_empty() {
         return Err(
             format!(
