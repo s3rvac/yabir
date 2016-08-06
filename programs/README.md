@@ -13,8 +13,11 @@ This directory contains various programs that you can run with the interpreter:
   Wikipedia](https://en.wikipedia.org/wiki/Brainfuck)).
 * `sierpinski.bf` -- Generates a Sierpinksi triangle fractal (taken from
   [Spanish Wikipedia](http://es.wikipedia.org/wiki/Brainfuck)).
+* `wc.bf` -- Counts lines, words, and bytes from stdin (taken from
+  [http://www.hevanet.com/cristofd/brainfuck/](http://www.hevanet.com/cristofd/brainfuck/)).
 
 More programs can be found here (untested):
 
 * https://github.com/pablojorge/brainfuck/tree/master/programs
 * http://esoteric.sange.fi/brainfuck/bf-source/prog
+* http://www.hevanet.com/cristofd/brainfuck/
