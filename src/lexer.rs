@@ -72,7 +72,7 @@ mod tests {
                 Token::Read,
                 Token::Write,
                 Token::LoopStart,
-                Token::LoopEnd
+                Token::LoopEnd,
             ]
         );
     }

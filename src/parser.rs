@@ -51,10 +51,12 @@ pub fn parse(tokens: &Tokens) -> Result<Instructions, String> {
             Token::Dec => instructions.push(Instruction::Dec),
             Token::Read => instructions.push(Instruction::Read),
             Token::Write => instructions.push(Instruction::Write),
-            Token::LoopStart =>
-                try!(handle_loop_start(&mut instructions, &mut loop_stack, i)),
-            Token::LoopEnd =>
-                try!(handle_loop_end(&mut instructions, &mut loop_stack, i)),
+            Token::LoopStart => {
+                try!(handle_loop_start(&mut instructions, &mut loop_stack, i))
+            }
+            Token::LoopEnd => {
+                try!(handle_loop_end(&mut instructions, &mut loop_stack, i))
+            }
         }
     }
     try!(ensure_all_loops_have_ended(&loop_stack));
@@ -79,9 +81,7 @@ fn handle_loop_end(instructions: &mut Instructions,
     let target = match loop_stack.pop() {
         Some(target) => target,
         None => {
-            return Err(
-                format!("missing start of a loop ended at index {}", i)
-            );
+            return Err(format!("missing start of a loop ended at index {}", i));
         }
     };
     instructions.push(Instruction::LoopEnd(target));

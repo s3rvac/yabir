@@ -112,15 +112,20 @@ impl Runner {
     fn read_value(&mut self, mut input: &mut std::io::Read) -> Result<(), String> {
         let mut buf = [0u8];
         match input.read_exact(&mut buf) {
-            Err(err) => match err.kind() {
-                std::io::ErrorKind::UnexpectedEof => {
-                    // There are multiple ways of dealing with EOF (see
-                    // https://en.wikipedia.org/wiki/Brainfuck#End-of-file_behavior).
-                    // We have chosen to leave the current cell unchanged.
-                    Ok(())
-                },
-                _ => Err(format!("reading of a value failed (reason: {:?})", err.kind())),
-            },
+            Err(err) => {
+                match err.kind() {
+                    std::io::ErrorKind::UnexpectedEof => {
+                        // There are multiple ways of dealing with EOF (see
+                        // https://en.wikipedia.org/wiki/Brainfuck#End-of-file_behavior).
+                        // We have chosen to leave the current cell unchanged.
+                        Ok(())
+                    }
+                    _ => {
+                        Err(format!("reading of a value failed (reason: {:?})",
+                                    err.kind()))
+                    }
+                }
+            }
             Ok(_) => {
                 self.store_value(buf[0]);
                 Ok(())
@@ -131,9 +136,7 @@ impl Runner {
     fn write_value(&mut self, mut output: &mut std::io::Write) -> Result<(), String> {
         let value = self.load_value();
         match output.write(&[value]) {
-            Err(err) => Err(
-                format!("writing of a value failed (reason: {})", err)
-            ),
+            Err(err) => Err(format!("writing of a value failed (reason: {})", err)),
             Ok(_) => Ok(()),
         }
     }
@@ -153,9 +156,9 @@ impl Runner {
 
     fn ensure_can_increment_dp_by_one(&self) -> Result<(), String> {
         match self.dp {
-            std::usize::MAX => Err(
-                "cannot increment the data pointer because it is MAX".to_string()
-            ),
+            std::usize::MAX => {
+                Err("cannot increment the data pointer because it is MAX".to_string())
+            }
             _ => Ok(()),
         }
     }
@@ -192,9 +195,7 @@ mod tests {
     use parser::Instruction;
     use parser::Instructions;
 
-    fn run_and_get_output(prog: Instructions,
-                          input: &[u8])
-                          -> Result<Vec<u8>, String> {
+    fn run_and_get_output(prog: Instructions, input: &[u8]) -> Result<Vec<u8>, String> {
         let mut output = Vec::new();
         match {
             let mut input_reader = std::io::BufReader::new(input.as_ref());
@@ -236,7 +237,7 @@ mod tests {
         assert_run_writes_correct_output(
             vec![
                 Instruction::Read,
-                Instruction::Write
+                Instruction::Write,
             ],
             &[1],
             &[1]
@@ -249,7 +250,7 @@ mod tests {
             vec![
                 Instruction::Inc,
                 Instruction::Read,
-                Instruction::Write
+                Instruction::Write,
             ],
             &[],
             &[1]
@@ -313,7 +314,7 @@ mod tests {
                 Instruction::LoopEnd(1),
                 Instruction::Write,
                 Instruction::Next,
-                Instruction::Write
+                Instruction::Write,
             ],
             &[2],
             &[0, 2]
@@ -342,7 +343,7 @@ mod tests {
                 Instruction::LoopStart(15),
                 Instruction::Write,
                 Instruction::Next,
-                Instruction::LoopEnd(12)
+                Instruction::LoopEnd(12),
             ],
             &[4, 3, 1, 5],
             &[4, 3, 1, 5]
