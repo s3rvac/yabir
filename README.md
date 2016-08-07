@@ -14,7 +14,7 @@ Building and Running
 
 * Ensure that you have a [Rust](http://www.rust-lang.org/install.html)
   installed, including [cargo](https://crates.io/install) (Rust's build and
-  package manager). The project was tested with Rust 1.10.
+  package manager).
 * Clone the repository:
 
 ```
