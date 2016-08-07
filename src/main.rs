@@ -4,6 +4,8 @@
 // License:   Apache 2.0 or MIT, see the README file for more details
 //
 
+//! Yet Another Brainfuck Interpreter in Rust.
+
 pub mod cli;
 pub mod lexer;
 pub mod loader;

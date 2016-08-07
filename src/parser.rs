@@ -10,7 +10,7 @@ use lexer::Token;
 use lexer::Tokens;
 
 ///
-/// Instructions.
+/// Available instructions.
 ///
 #[derive(Debug, PartialEq)]
 pub enum Instruction {

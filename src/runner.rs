@@ -39,8 +39,8 @@ impl Runner {
     /// # Arguments
     ///
     /// * `prog` - Program to be run.
-    /// * `input` - Input for the program.
-    /// * `output` - Output for the program.
+    /// * `input` - Input stream.
+    /// * `output` - Output stream.
     ///
     pub fn run(&mut self,
                prog: Instructions,
@@ -180,8 +180,8 @@ impl Runner {
 /// # Arguments
 ///
 /// * `prog` - Program to be run.
-/// * `input` - Input for the program.
-/// * `output` - Output for the program.
+/// * `input` - Input stream.
+/// * `output` - Output stream.
 ///
 pub fn run(prog: Instructions,
            mut input: &mut std::io::Read,
