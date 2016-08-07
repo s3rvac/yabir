@@ -1,9 +1,3 @@
-//
-// Project:   yabir
-// Copyright: (c) 2016 by Petr Zemek <s3rvac@gmail.com> and contributors
-// License:   Apache 2.0 or MIT, see the README file for more details
-//
-
 //! Command-line interface.
 
 use std::env;
