@@ -6,8 +6,8 @@
 
 //! Loading of programs into memory.
 
-use std::io::prelude::*;
-use std;
+use std::fs::File;
+use std::io::Read;
 
 ///
 /// Loads a program from the given path into memory.
@@ -17,7 +17,7 @@ use std;
 /// * `path` - Path to the program.
 ///
 pub fn load_prog(path: &String) -> Result<String, String> {
-    let mut f = try!(std::fs::File::open(path)
+    let mut f = try!(File::open(path)
         .map_err(|err| err.to_string())
     );
     let mut s = String::new();

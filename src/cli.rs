@@ -6,13 +6,13 @@
 
 //! Command-line interface.
 
-use std;
+use std::env;
 
 ///
 /// Returns program arguments, excluding program name.
 ///
 pub fn get_args() -> Vec<String> {
-    std::env::args().skip(1).collect()
+    env::args().skip(1).collect()
 }
 
 ///
