@@ -1,6 +1,8 @@
 Yet Another Brainfuck Interpreter in Rust
 =========================================
 
+[![Build Status](https://travis-ci.org/s3rvac/yabir.svg?branch=master)](https://travis-ci.org/s3rvac/yabir)
+
 Lately I have been learning [Rust](https://www.rust-lang.org/). As my first
 project, I decided to write a
 [Brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter. Feel free to
