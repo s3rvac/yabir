@@ -56,12 +56,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_tokenize_returns_empty_vec_when_there_are_no_instructions() {
+    fn tokenize_returns_empty_vec_when_there_are_no_instructions() {
         assert_eq!(tokenize(&"".to_string()), vec![]);
     }
 
     #[test]
-    fn test_tokenize_recognizes_all_valid_tokens() {
+    fn tokenize_recognizes_all_valid_tokens() {
         assert_eq!(
             tokenize(&"><+-,.[]".to_string()),
             vec![
@@ -78,7 +78,7 @@ mod tests {
     }
 
     #[test]
-    fn test_tokenize_ignores_unsupported_characters() {
+    fn tokenize_ignores_unsupported_characters() {
         assert_eq!(tokenize(&"a|()@#".to_string()), vec![]);
     }
 }

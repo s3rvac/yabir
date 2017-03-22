@@ -32,22 +32,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_should_print_usage_returns_true_on_no_arguments() {
+    fn should_print_usage_returns_true_on_no_arguments() {
         assert!(should_print_usage(&vec![]));
     }
 
     #[test]
-    fn test_should_print_usage_returns_true_on_help_short_form() {
+    fn should_print_usage_returns_true_on_help_short_form() {
         assert!(should_print_usage(&vec!["-h".to_string()]));
     }
 
     #[test]
-    fn test_should_print_usage_returns_true_on_help_long_form() {
+    fn should_print_usage_returns_true_on_help_long_form() {
         assert!(should_print_usage(&vec!["--help".to_string()]));
     }
 
     #[test]
-    fn test_should_print_usage_returns_false_when_prog_is_given() {
+    fn should_print_usage_returns_false_when_prog_is_given() {
         assert!(!should_print_usage(&vec!["prog.bf".to_string()]));
     }
 }

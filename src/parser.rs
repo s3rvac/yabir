@@ -104,12 +104,12 @@ mod tests {
     use lexer::Token;
 
     #[test]
-    fn test_parse_returns_empty_vec_when_there_are_no_tokens() {
+    fn parse_returns_empty_vec_when_there_are_no_tokens() {
         assert_eq!(parse(&vec![]).unwrap(), vec![]);
     }
 
     #[test]
-    fn test_parse_correctly_parses_infinite_loop() {
+    fn parse_correctly_parses_infinite_loop() {
         // []
         let tokens = vec![
             Token::LoopStart,
@@ -123,7 +123,7 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_correctly_parses_valid_program() {
+    fn parse_correctly_parses_valid_program() {
         // [->+<,]
         let tokens = vec![
             Token::LoopStart,
@@ -147,7 +147,7 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_returns_error_when_missing_loop_end() {
+    fn parse_returns_error_when_missing_loop_end() {
         assert_eq!(
             parse(&vec![Token::LoopStart]),
             Err("missing end of a loop started at index 0".to_string())
@@ -155,7 +155,7 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_returns_error_when_missing_loop_start() {
+    fn parse_returns_error_when_missing_loop_start() {
         assert_eq!(
             parse(&vec![Token::LoopEnd]),
             Err("missing start of a loop ended at index 0".to_string())

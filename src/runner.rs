@@ -224,7 +224,7 @@ mod tests {
     }
 
     #[test]
-    fn test_run_does_nothing_when_program_has_no_instructions() {
+    fn run_does_nothing_when_program_has_no_instructions() {
         assert_run_writes_correct_output(
             vec![],
             &[],
@@ -233,7 +233,7 @@ mod tests {
     }
 
     #[test]
-    fn test_run_can_read_from_input_and_write_to_output() {
+    fn run_can_read_from_input_and_write_to_output() {
         assert_run_writes_correct_output(
             vec![
                 Instruction::Read,
@@ -245,7 +245,7 @@ mod tests {
     }
 
     #[test]
-    fn test_read_does_not_alter_cell_value_when_at_end_of_file() {
+    fn read_does_not_alter_cell_value_when_at_end_of_file() {
         assert_run_writes_correct_output(
             vec![
                 Instruction::Inc,
@@ -258,7 +258,7 @@ mod tests {
     }
 
     #[test]
-    fn test_run_can_increment_cell() {
+    fn run_can_increment_cell() {
         assert_run_writes_correct_output(
             vec![
                 Instruction::Read,
@@ -271,7 +271,7 @@ mod tests {
     }
 
     #[test]
-    fn test_run_can_decrement_cell() {
+    fn run_can_decrement_cell() {
         assert_run_writes_correct_output(
             vec![
                 Instruction::Read,
@@ -284,7 +284,7 @@ mod tests {
     }
 
     #[test]
-    fn test_run_can_move_between_cells() {
+    fn run_can_move_between_cells() {
         assert_run_writes_correct_output(
             vec![
                 Instruction::Read,
@@ -302,7 +302,7 @@ mod tests {
     }
 
     #[test]
-    fn test_run_can_loop() {
+    fn run_can_loop() {
         assert_run_writes_correct_output(
             vec![
                 Instruction::Read,
@@ -322,7 +322,7 @@ mod tests {
     }
 
     #[test]
-    fn test_copies_input_to_output() {
+    fn copies_input_to_output() {
         assert_run_writes_correct_output(
             vec![
                 // Read the whole input:
@@ -351,7 +351,7 @@ mod tests {
     }
 
     #[test]
-    fn test_returns_error_when_underflowing_data_pointer() {
+    fn returns_error_when_underflowing_data_pointer() {
         assert_run_returns_error(vec![Instruction::Prev], &[]);
     }
 }
