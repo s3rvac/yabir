@@ -22,9 +22,9 @@ fn main() {
 }
 
 fn run_prog(prog_path: &String) -> Result<(), String> {
-    let prog = try!(loader::load_prog(&prog_path));
+    let prog = loader::load_prog(&prog_path)?;
     let prog_tokens = lexer::tokenize(&prog);
-    let prog_ops = try!(parser::parse(&prog_tokens));
+    let prog_ops = parser::parse(&prog_tokens)?;
     let mut input = std::io::stdin();
     let mut output = std::io::stdout();
     runner::run(prog_ops, &mut input, &mut output)

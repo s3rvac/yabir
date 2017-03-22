@@ -47,7 +47,7 @@ impl Runner {
         self.dp = 0;
 
         while !self.is_prog_end() {
-            try!(self.run_instruction(&mut input, &mut output));
+            self.run_instruction(&mut input, &mut output)?;
         }
 
         Ok(())
@@ -63,11 +63,11 @@ impl Runner {
                        -> Result<(), String> {
         match self.prog[self.ip] {
             Instruction::Next => {
-                try!(self.ensure_can_increment_dp_by_one());
+                self.ensure_can_increment_dp_by_one()?;
                 self.dp += 1;
             }
             Instruction::Prev => {
-                try!(self.ensure_can_decrement_dp_by_one());
+                self.ensure_can_decrement_dp_by_one()?;
                 self.dp -= 1;
             }
             Instruction::Inc => {
@@ -79,10 +79,10 @@ impl Runner {
                 self.store_value(value.wrapping_sub(1));
             }
             Instruction::Read => {
-                try!(self.read_value(&mut input));
+                self.read_value(&mut input)?;
             }
             Instruction::Write => {
-                try!(self.write_value(&mut output));
+                self.write_value(&mut output)?;
             }
             Instruction::LoopStart(loop_end_ip) => {
                 if self.is_current_cell_zero() {

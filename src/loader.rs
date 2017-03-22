@@ -11,10 +11,8 @@ use std::io::Read;
 /// * `path` - Path to the program.
 ///
 pub fn load_prog(path: &String) -> Result<String, String> {
-    let mut f = try!(File::open(path)
-        .map_err(|err| err.to_string()));
+    let mut f = File::open(path).map_err(|err| err.to_string())?;
     let mut s = String::new();
-    try!(f.read_to_string(&mut s)
-        .map_err(|err| err.to_string()));
+    f.read_to_string(&mut s).map_err(|err| err.to_string())?;
     Ok(s)
 }
