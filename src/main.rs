@@ -15,10 +15,10 @@ fn main() {
         std::process::exit(0);
     }
 
-    run_prog(&args[0]).unwrap_or_else(|err| {
+    if let Err(err) = run_prog(&args[0]) {
         print_error(&err);
         std::process::exit(1);
-    })
+    }
 }
 
 fn run_prog(prog_path: &String) -> Result<(), String> {
