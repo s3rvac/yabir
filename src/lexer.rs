@@ -31,7 +31,7 @@ pub type Tokens = Vec<Token>;
 ///
 /// # Arguments
 ///
-/// * `prog` - A program to be tokenized.
+/// * `prog` - Program to be tokenized.
 ///
 pub fn tokenize(prog: &String) -> Tokens {
     let mut tokens = Tokens::new();
